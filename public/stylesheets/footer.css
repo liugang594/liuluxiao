@@ -1,0 +1,16 @@
+.footer{
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	background: #c4c4c4;
+	position: absolute;
+	bottom: 0px;
+	height: 30px;
+	
+}
+.icp{
+	height: 100%;
+	vertical-align: middle;
+	color: white;
+	text-decoration: none;
+}

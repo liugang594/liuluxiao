@@ -1,0 +1,30 @@
+.active{
+	background: white;
+}
+.menusdiv{
+	width: 100%;
+	overflow: hidden;
+}
+.menusul{
+	width: 100%;
+	overflow: hidden;
+	background: #ae98ff;
+	margin: 0px;
+}
+.menusul>li{
+	list-style: none;
+	float: left;
+	line-height: 40px;
+	vertical-align: middle;
+	margin: 0px 20px;
+	width: 50px;
+}
+.menusul>li>a{
+	height: 100%;
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	font-size: 20px;
+	color: blue;
+	font-weight: bold;
+}
