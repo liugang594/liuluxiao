@@ -28,3 +28,17 @@
 	color: blue;
 	font-weight: bold;
 }
+.operators{
+	display: inline-block;
+	float: right;
+	padding: 0px 5px;
+}
+.top_bar{
+	padding: 10px 0px;
+}
+.top_bar h2{
+	display:  inline-block;
+	padding: 0px 5px;
+	margin: 0px;
+	color: rgb(249,152, 0)
+}

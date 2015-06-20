@@ -14,4 +14,7 @@ router.get('/about', function(req, res, next) {
 router.get('/articles', function(req, res, next) {
   res.render('articles', { title: 'Express' , path : '/articles' });
 });
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'Express' , path : '/login' });
+});
 module.exports = router;

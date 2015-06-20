@@ -1,0 +1,24 @@
+.login{
+	background: #cecc00;
+	width: 400px;
+	height: 150px;
+	margin: auto;
+	text-align: center;
+	vertical-align: middle;
+	margin-top: 40px;
+}
+.login label{
+	width: 100px;
+	margin-top: 10px;
+}
+
+.login .submit{
+	float: right;
+	margin-right: 20px;
+	margin-top: 20px;
+}
+.login input{
+	width: 300px;
+	margin-top: 10px;
+	padding: 5px 0px;
+}

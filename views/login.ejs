@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <% include header.ejs %>
+        <link rel='stylesheet' href='/stylesheets/login.css' />
+  </head>
+  <body>
+    
+	<% include menus.ejs %>
+	<div class="login">
+		<form method="post">
+			<label for="email">邮箱：</label>
+			<input type="text" id="email" name="email" placeholder="请输入邮箱"/><br/>
+
+			<label for="password">密码：</label>
+			<input type="password" id="password" name="password" placeholder="请输入密码"/><br/>
+<!-- 
+			<label for="passwordrepeat">确认：</label>
+			<input type="passwordrepeat" id="passwordrepeat" name="passwordrepeat" placeholder="请再次输入密码"/><br/> -->
+
+			<button class="submit">提交</button>
+		</form>
+	</div>
+    <% include footer.ejs %>
+  </body>
+</html>
