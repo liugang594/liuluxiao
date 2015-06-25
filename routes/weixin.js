@@ -79,10 +79,12 @@ setInterval(queryAccessToken, 7000000);
 
 //报名系统，微信端会传入当前请求的code，然后根据access_token和code去请求用户信息
 router.get('/baoming/apply',function (req, res, next) {
-  res.writeHead(200);
-  console.log(req.query.code);
-  queryCurrentUserBaseInfo(accessTokenValue, req.query.code);
-  res.end("hello world");
+  // res.writeHead(200);
+  // console.log(req.query.code);
+  queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserName){
+      res.render('baoming_apply', { name: currentUserName});
+  });
+  // res.end("hello world");
 });
 
 
@@ -94,7 +96,7 @@ var currentUserInfoOptions = {
     method: 'GET'
 };
 
-function queryCurrentUserBaseInfo(accessToken, code){
+function queryCurrentUserBaseInfo(accessToken, code, next){
         currentUserInfoOptions.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
         var currentUserInfoReq = https.request(currentUserInfoOptions, function (res) {
             res.setEncoding('utf8');
@@ -102,7 +104,7 @@ function queryCurrentUserBaseInfo(accessToken, code){
               var responseObj = JSON.parse(responseText);
               var userId = responseObj.UserId;
               console.log("获取当前用户UserId:"+userId);
-              queryCurrentUserDetailInfo(accessToken, userId);
+              queryCurrentUserDetailInfo(accessToken, userId, next);
             });
         });
         currentUserInfoReq.end();
@@ -117,13 +119,14 @@ var userDetailInfoOptions = {
     method: 'GET'
 };
 
-function queryCurrentUserDetailInfo(accessToken, userId){
+function queryCurrentUserDetailInfo(accessToken, userId, next){
         userDetailInfoOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userId ;
         var userDetailInfoReq = https.request(userDetailInfoOptions, function (res) {
             res.setEncoding('utf8');
             res.on('data', function (responseText) {
               var responseObj = JSON.parse(responseText);
               console.log("获取当前用户详细信息:"+responseText);
+              next(responseObj.name);
 //{"errcode":0,"errmsg":"ok","userid":"liugang","name":"刘刚","department":[1],"gender":"1","email":"liugang@ufenqi.com","weixinid":"liugang594","avatar":"http:\/\/shp.qpic.cn\/bizmp\/zp11meG1a1vgxGMIRl80icwaVMSMlhCSJoBrrF76MF6EShQGZGkSTTA\/","status":1,"extattr":{"attrs":[]}}
             });
         });
