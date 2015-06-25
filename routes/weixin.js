@@ -118,7 +118,7 @@ var userDetailInfoOptions = {
 };
 
 function queryCurrentUserDetailInfo(accessToken, userId){
-        userDetailInfoOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userid ;
+        userDetailInfoOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userId ;
         var userDetailInfoReq = https.request(userDetailInfoOptions, function (res) {
             res.setEncoding('utf8');
             res.on('data', function (responseText) {
