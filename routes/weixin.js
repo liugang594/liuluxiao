@@ -56,7 +56,7 @@ var accessTokenValue = '';
 var queryAccessTokenOptions = {
     hostname: 'qyapi.weixin.qq.com',
     port: 443,
-    path: '/cgi-bin/gettoken?corpid='+config.corpid+'&corpsecret='+config.corpsecret,
+    path: '/cgi-bin/gettoken?corpid='+config.corpId+'&corpsecret='+config.corpsecret,
     method: 'GET'
 }
 
@@ -64,7 +64,8 @@ var queryAccessTokenOptions = {
 function queryAccessToken(){
         var accessTokenReq = https.request(queryAccessTokenOptions, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (responseObj) {
+            res.on('data', function (responseText) {
+                var responseObj = JSON.parse(responseText);
                 console.log("获取access_token:"+responseObj.access_token);
                 accessTokenValue = responseObj.access_token;
             });
@@ -97,7 +98,8 @@ function queryCurrentUserBaseInfo(accessToken, code){
         currentUserInfoOptions.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
         var currentUserInfoReq = https.request(currentUserInfoOptions, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (responseObj) {
+            res.on('data', function (responseText) {
+              var responseObj = JSON.parse(responseText);
               var userId = responseObj.UserId;
               console.log("获取当前用户UserId:"+userId);
               queryCurrentUserDetailInfo(accessToken, userId);
@@ -119,8 +121,9 @@ function queryCurrentUserDetailInfo(accessToken, userId){
         userDetailInfoOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userid ;
         var userDetailInfoReq = https.request(userDetailInfoOptions, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (responseObj) {
-              console.log("获取当前用户详细信息:"+responseObj);
+            res.on('data', function (responseText) {
+              var responseObj = JSON.parse(responseText);
+              console.log("获取当前用户详细信息:"+responseText);
 //{"errcode":0,"errmsg":"ok","userid":"liugang","name":"刘刚","department":[1],"gender":"1","email":"liugang@ufenqi.com","weixinid":"liugang594","avatar":"http:\/\/shp.qpic.cn\/bizmp\/zp11meG1a1vgxGMIRl80icwaVMSMlhCSJoBrrF76MF6EShQGZGkSTTA\/","status":1,"extattr":{"attrs":[]}}
             });
         });
