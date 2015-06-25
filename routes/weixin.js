@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var wechat = require('wechat-enterprise');
+var https = require("https");
+
 
 
 // signature    微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
@@ -14,7 +16,8 @@ var wechat = require('wechat-enterprise');
 var config = {
         token: 'eckHIIvmoi03YK',
         encodingAESKey: 'CEuEdsnKg5S65bMw1f9tWPbFo4bcjcnYmkbmhkQugLP',
-        corpId: 'wx4ac672b2ce5632dc'
+        corpId: 'wx4ac672b2ce5632dc',
+        corpsecret: '-7q3gszP1KeP6dK5gQ9fSVwoL9zwR6kEB1pWbKkqZua-Kgd4XRZ8Q1cW3xO-0GP-'
 };
 
 
@@ -39,63 +42,89 @@ var config = {
 //      res.send(s.message);
 // });
 
+// 验证微信企业号是否有效
 router.get('/', wechat(config, function (req, res, next) {
+  console.log("验证微信企业号是否有效")
   res.writeHead(200);
   res.end('hello node api');
 }));
 
+
+// 请求access_token，请求路径格式如下
+// https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wx4ac672b2ce5632dc&corpsecret=-7q3gszP1KeP6dK5gQ9fSVwoL9zwR6kEB1pWbKkqZua-Kgd4XRZ8Q1cW3xO-0GP-
+var accessTokenValue = '';
+var queryAccessTokenOptions = {
+    hostname: 'qyapi.weixin.qq.com',
+    port: 443,
+    path: '/cgi-bin/gettoken?corpid='+config.corpid+'&corpsecret='+config.corpsecret,
+    method: 'GET'
+}
+
+// 请求access_token
+function queryAccessToken(){
+        var accessTokenReq = https.request(queryAccessTokenOptions, function (res) {
+            res.setEncoding('utf8');
+            res.on('data', function (responseObj) {
+                console.log("获取access_token:"+responseObj.access_token);
+                accessTokenValue = responseObj.access_token;
+            });
+        });
+        accessTokenReq.end();
+}
+// 上来时先请求一次access_token
+queryAccessToken();
+//然后每隔7000秒重新请求
+setInterval(queryAccessToken, 7000000);
+
+//报名系统，微信端会传入当前请求的code，然后根据access_token和code去请求用户信息
 router.get('/baoming/apply',function (req, res, next) {
   res.writeHead(200);
   console.log(req.query.code);
-  getUserBaseInfo('UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61', req.query.code);
+  queryCurrentUserBaseInfo(accessTokenValue, req.query.code);
   res.end("hello world");
 });
 
-var https = require("https");
 
-var options = {
+//得到当前用户的UserId
+var currentUserInfoOptions = {
     hostname: 'qyapi.weixin.qq.com',
     port: 443,
     path: '/cgi-bin/user/getuserinfo?',
     method: 'GET'
 };
 
-function getUserBaseInfo(accessToken, code){
-        options.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
-        console.log(options.path+"  "+accessToken+"  "+code);
-        var req = https.request(options, function (res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
+function queryCurrentUserBaseInfo(accessToken, code){
+        currentUserInfoOptions.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
+        var currentUserInfoReq = https.request(currentUserInfoOptions, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
+            res.on('data', function (responseObj) {
+              var userId = responseObj.UserId;
+              console.log("获取当前用户UserId:"+userId);
+              queryCurrentUserDetailInfo(accessToken, userId);
             });
         });
-        req.end();
+        currentUserInfoReq.end();
 }
 
 
-
-var detailOptions = {
+//得到当前用户的详细信息
+var userDetailInfoOptions = {
     hostname: 'qyapi.weixin.qq.com',
     port: 443,
     path: '/cgi-bin/user/get?',
     method: 'GET'
 };
 
-function getUserDetailInfo(accessToken, userId){
-        detailOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userid ;
-        console.log(detailOptions.path+"  "+accessToken+"  "+userid);
-        var detailReq = https.request(detailOptions, function (res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
+function queryCurrentUserDetailInfo(accessToken, userId){
+        userDetailInfoOptions.path = '/cgi-bin/user/get?access_token='+accessToken+'&userid='+userid ;
+        var userDetailInfoReq = https.request(userDetailInfoOptions, function (res) {
             res.setEncoding('utf8');
-            res.on('data', function (chunk) {
+            res.on('data', function (responseObj) {
+              console.log("获取当前用户详细信息:"+responseObj);
 //{"errcode":0,"errmsg":"ok","userid":"liugang","name":"刘刚","department":[1],"gender":"1","email":"liugang@ufenqi.com","weixinid":"liugang594","avatar":"http:\/\/shp.qpic.cn\/bizmp\/zp11meG1a1vgxGMIRl80icwaVMSMlhCSJoBrrF76MF6EShQGZGkSTTA\/","status":1,"extattr":{"attrs":[]}}
-                console.log('BODY: ' + chunk);
             });
         });
-        detailReq.end();
+        userDetailInfoReq.end();
 
 }
 module.exports = router;
