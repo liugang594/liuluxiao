@@ -8,6 +8,14 @@ var app = require('../app');
 var debug = require('debug')('liuluxiao:server');
 var http = require('http');
 
+// var jssha = require("jssha");
+
+// var shaObj = new jssha("SHA-1", "TEXT");
+// shaObj.update("This is a test");
+// var hash = shaObj.getHash("HEX");
+// console.log(hash);
+
+
 /**
  * Get port from environment and store in Express.
  */
