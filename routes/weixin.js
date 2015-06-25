@@ -44,4 +44,32 @@ router.get('/', wechat(config, function (req, res, next) {
   res.end('hello node api');
 }));
 
+router.get('/baoming/apply',function (req, res, next) {
+  res.writeHead(200);
+  console.log(req.params.code);
+  res.end('hello node api');
+  getUserInfo('', req.params.code);
+});
+
+var https = require("https");
+
+var options = {
+    hostname: 'qyapi.weixin.qq.com',
+    port: 443,
+    path: '/cgi-bin/user/getuserinfo?',
+    method: 'GET'
+};
+
+function getUserInfo(accessToken, code){
+	options.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
+	var req = https.request(options, function (res) {
+	    console.log('STATUS: ' + res.statusCode);
+	    console.log('HEADERS: ' + JSON.stringify(res.headers));
+	    res.setEncoding('utf8');
+	    res.on('data', function (chunk) {
+	        console.log('BODY: ' + chunk);
+	    });
+	});
+}
+
 module.exports = router;
