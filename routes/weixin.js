@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var wechat = require('wechat-enterprise');
 
 
 // signature	微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
@@ -18,22 +19,29 @@ var config = {
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-	var msg_signature = req.query.msg_signature;
-	var timestamp = req.query.timestamp;
-	var nonce = req.query.nonce;
-	var echostr = req.query.echostr;
-	var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.corpId)
-	var s = cryptor.decrypt(echostr);
+// router.get('/', function(req, res, next) {
+// 	var msg_signature = req.query.msg_signature;
+// 	var timestamp = req.query.timestamp;
+// 	var nonce = req.query.nonce;
+// 	var echostr = req.query.echostr;
+// 	var cryptor = new wechat(config, function(){
+// 		console.log("handler");
+// 	});
+// 	var s = cryptor.decrypt(echostr);
 
-	console.log(msg_signature);
-	console.log(timestamp);
-	console.log(nonce);
-	console.log(echostr);
-	console.log(cryptor);
-	console.log(s.message);
+// 	console.log(msg_signature);
+// 	console.log(timestamp);
+// 	console.log(nonce);
+// 	console.log(echostr);
+// 	console.log(cryptor);
+// 	console.log(s.message);
 
-	res.send(s.message);
-});
+// 	res.send(s.message);
+// });
+
+router.get('/', wechat(config, function (req, res, next) {
+  res.writeHead(200);
+  res.end('hello node api');
+}));
 
 module.exports = router;
