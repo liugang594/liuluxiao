@@ -1,0 +1,51 @@
+1. 获取 code
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4ac672b2ce5632dc&redirect_uri=http://www.liuluxiao.cn/weixin/baoming/apply&response_type=code&scope=snsapi_base&state=ufenqi#wechat_redirect
+
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4ac672b2ce5632dc&redirect_uri=http%3a%2f%2fwww.liuluxiao.cn%2fweixin%2fbaoming%2fapply&response_type=code&scope=snsapi_base&state=ufenqi#wechat_redirect
+
+
+2. 获取 access_token
+https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wx4ac672b2ce5632dc&corpsecret=-7q3gszP1KeP6dK5gQ9fSVwoL9zwR6kEB1pWbKkqZua-Kgd4XRZ8Q1cW3xO-0GP-
+
+3. 获取用户信息
+
+https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE
+
+https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61&code=0c132126835540f94f6f0965c6f60fd7
+
+
+4. 获取用户详细信息
+
+https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61&userid=liugang
+
+0c132126835540f94f6f0965c6f60fd7
+{"access_token":"UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61","expires_in":7200}
+
+
+/cgi-bin/user/getuserinfo?access_token=UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61&code=327de07b85269e232a6cc575dd36b843  UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61
+
+
+var https = require("https");
+
+var options = {
+    hostname: 'qyapi.weixin.qq.com',
+    port: 443,
+    path: '/cgi-bin/user/getuserinfo?',
+    method: 'GET'
+};
+
+function getUserInfo(accessToken, code){
+        options.path = '/cgi-bin/user/getuserinfo?access_token='+accessToken+'&code='+code ;
+        console.log(options.path+"  "+accessToken+"  "+code);
+        var req = https.request(options, function (res) {
+            console.log('STATUS: ' + res.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(res.headers));
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                console.log('BODY: ' + chunk);
+            });
+        });
+}
+
+getUserInfo("UYjZrrZdbFBLHzFOJt8s-Hvi3fjQiOi3M7pAFuoqKQwKmTcX-ISXyAx5wAWT_v61", "327de07b85269e232a6cc575dd36b843");
