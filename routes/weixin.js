@@ -6,15 +6,34 @@ var router = express.Router();
 // timestamp	时间戳
 // nonce	随机数
 // echostr	随机字符串
+//token : eckHIIvmoi03YK
+//EncodingAESKey : CEuEdsnKg5S65bMw1f9tWPbFo4bcjcnYmkbmhkQugLP
+
+
+var config = {
+	token: 'eckHIIvmoi03YK',
+ 	encodingAESKey: 'CEuEdsnKg5S65bMw1f9tWPbFo4bcjcnYmkbmhkQugLP',
+  	corpId: 'wx4ac672b2ce5632dc'
+};
 
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-	console.log(req.params.signature);
-	console.log(req.params.timestamp);
-	console.log(req.params.nonce);
-	console.log(req.params.echostr);
-  res.send(req.params.echostr);
+	var msg_signature = req.query.msg_signature;
+	var timestamp = req.query.timestamp;
+	var nonce = req.query.nonce;
+	var echostr = req.query.echostr;
+	var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.corpId)
+	var s = cryptor.decrypt(echostr);
+
+	console.log(msg_signature);
+	console.log(timestamp);
+	console.log(nonce);
+	console.log(echostr);
+	console.log(cryptor);
+	console.log(s.message);
+
+	res.send(s.message);
 });
 
 module.exports = router;
