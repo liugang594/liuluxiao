@@ -18,3 +18,29 @@ user.find({'name':'liugang'}, function(err, docs){
 var moment = require("moment");
 var now = moment().format("YYYY-MM-DD HH:mm:ss");
 console.log(now);
+console.log(moment().format("e"));
+
+function canApply(){
+      var today = moment();
+      var currentDay = today.format('e');
+      //apply is opening only on wednesday or thursday
+      if(currentDay != 3 && currentDay != 4){
+      	 return false;
+      }
+      var currentHour = today.format('H');
+      //apply is opening between 3-9:00 to 4-19:00
+      if(currentDay == 3 && currentHour < 9){
+         return false;
+      }
+      if(currentDay == 4 && currentHour > 19){
+         return false;
+      }
+      return true;
+      
+}
+
+function alreadyApplied(userName){
+     
+}
+
+console.log(canApply());
