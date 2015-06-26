@@ -3,7 +3,11 @@ var router = express.Router();
 var wechat = require('wechat-enterprise');
 var https = require("https");
 
+var mongo = require("mongoose");
+var db = mongo.createConnection('localhost', 'liuluxiao');
 
+var memberSchema = mongo.Schema({name : 'string', date : 'string'});
+var memberTable = db.model('badminton', memberSchema);
 
 // signature    微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
 // timestamp    时间戳
@@ -79,10 +83,29 @@ setInterval(queryAccessToken, 7000000);
 
 //报名系统，微信端会传入当前请求的code，然后根据access_token和code去请求用户信息
 router.get('/baoming/apply',function (req, res, next) {
+  if(!canApply()){
+    res.render('apply_disabled');
+    return;
+  }
   // res.writeHead(200);
   // console.log(req.query.code);
-  queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserName){
-      res.render('baoming_apply', { name: currentUserName});
+  queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserName, dateKey){
+      checkUserAppliedStatus(currentUserName, function(isApplied){
+            if(isApplied){
+              res.render('already_applied', { name: currentUserName});
+            }else{
+              var me = new memberTable({name: currentUserName, date: dateKey});
+              me.save(function(err){
+                if(err)
+                  console.log(err);
+                else
+                  console.log(currentUserName+' 报名成功');
+              });
+
+              res.render('baoming_apply', { name: currentUserName});
+            }
+      });
+      
   });
   // res.end("hello world");
 });
@@ -133,4 +156,44 @@ function queryCurrentUserDetailInfo(accessToken, userId, next){
         userDetailInfoReq.end();
 
 }
+
+function canApply(){
+      var today = moment();
+      var currentDay = today.format('e');
+      //apply is opening only on wednesday or thursday
+      if(currentDay != 3 && currentDay != 4){
+         return false;
+      }
+      var currentHour = today.format('H');
+      //apply is opening between 3-9:00 to 4-19:00
+      if(currentDay == 3 && currentHour < 9){
+         return false;
+      }
+      if(currentDay == 4 && currentHour > 19){
+         return false;
+      }
+      return true;
+      
+}
+
+function checkUserAppliedStatus(userName, next){
+  var today = moment();
+  var currentDay = today.format('e');
+  var dateKey = "";
+  if(currentDay == 3){
+    dateKey = today.add(1, "days").format("YYYYMMDD");
+  }else if(currentDay == 4){
+    dateKey = today.format("YYYYMMDD");
+  }else{
+    return；
+  }
+  memberTableuser.find({'name': userName, 'date' : dateKey}, function(err, docs){
+     if(err || !docs){
+       next(false, dateKey);
+     }else{
+       next(true, dateKey);
+     }
+  });
+}
+
 module.exports = router;

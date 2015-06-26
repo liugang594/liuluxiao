@@ -41,8 +41,13 @@ function canApply(){
 
 function alreadyApplied(userName){
 	var today = moment();
-        console.log(today.format("YYYY-MM-DD HH:mm:ss"));
-        console.log(today.add(6, "days").format("YYYY-MM-DD HH:mm:ss"));
+	var currentDay = today.format('e');
+	var dateKey = "";
+	if(currentDay == 3){
+		dateKey = today.add(1, "days").format("YYYYMMDD");
+	}else if(currentDay == 4){
+		dateKey = today.format("YYYYMMDD");
+	}
 }
 console.log(alreadyApplied("aa"));
 console.log(canApply());
