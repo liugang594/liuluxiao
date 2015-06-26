@@ -1,4 +1,4 @@
-var mongo = require("mongoose");
+/*var mongo = require("mongoose");
 var db = mongo.createConnection('localhost', 'liuluxiao');
 
 var schema = mongo.Schema({name : 'string'});
@@ -14,4 +14,7 @@ me.save(function(err){
 
 user.find({'name':'liugang'}, function(err, docs){
 	console.log('search'+"  "+err+"  "+docs);
-});
+});*/
+var moment = require("moment");
+var now = moment().format("YYYY-MM-DD HH:mm:ss");
+console.log(now);
