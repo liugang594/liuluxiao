@@ -40,7 +40,9 @@ function canApply(){
 }
 
 function alreadyApplied(userName){
-     
+	var today = moment();
+        console.log(today.format("YYYY-MM-DD HH:mm:ss"));
+        console.log(today.add(6, "days").format("YYYY-MM-DD HH:mm:ss"));
 }
-
+console.log(alreadyApplied("aa"));
 console.log(canApply());
