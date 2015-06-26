@@ -185,7 +185,7 @@ function checkUserAppliedStatus(userName, next){
   }else if(currentDay == 4){
     dateKey = today.format("YYYYMMDD");
   }else{
-    return；
+    return;
   }
   memberTableuser.find({'name': userName, 'date' : dateKey}, function(err, docs){
      if(err || !docs){
