@@ -35,7 +35,7 @@ memberOperators.get = function(data, callback){
 	if(!data || !data.identity){
 		throw '用户标识不能为空';
 	}
-	memberTable.findOne({identity : data.identity}, callback);
+	memberTable.findOne(data, callback);
 }
 
 /*
@@ -63,9 +63,9 @@ module.exports = memberOperators;
 // })
 
 //test get
-// memberOperators.get({identity: 'liugang'}, function(err, docs){
-// 	err?console.log('查询失败：'+err):console.log(docs);
-// });
+//memberOperators.get({identity: 'liugang'}, function(err, docs){
+//	err?console.log('查询失败：'+err):console.log(docs);
+//});
 
 //test update
 // memberOperators.update({identity:'liugang', name:'ttt', date:'20150606', valid:false}, function(err, doc){
