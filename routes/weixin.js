@@ -89,8 +89,8 @@ router.get('/baoming/apply',function (req, res, next) {
   }
   // res.writeHead(200);
   // console.log(req.query.code);
-  queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserName, dateKey){
-      checkUserAppliedStatus(currentUserName, function(isApplied){
+  queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserName){
+      checkUserAppliedStatus(currentUserName, function(isApplied, dateKey){
             if(isApplied){
               res.render('already_applied', { name: currentUserName});
             }else{
@@ -161,15 +161,15 @@ function canApply(){
       var today = moment();
       var currentDay = today.format('e');
       //apply is opening only on wednesday or thursday
-      if(currentDay != 3 && currentDay != 4){
+      if(currentDay != 5 && currentDay != 6){
          return false;
       }
       var currentHour = today.format('H');
       //apply is opening between 3-9:00 to 4-19:00
-      if(currentDay == 3 && currentHour < 9){
+      if(currentDay == 5 && currentHour < 9){
          return false;
       }
-      if(currentDay == 4 && currentHour > 19){
+      if(currentDay == 6 && currentHour > 19){
          return false;
       }
       return true;
@@ -180,17 +180,20 @@ function checkUserAppliedStatus(userName, next){
   var today = moment();
   var currentDay = today.format('e');
   var dateKey = "";
-  if(currentDay == 3){
+  if(currentDay == 5){
     dateKey = today.add(1, "days").format("YYYYMMDD");
-  }else if(currentDay == 4){
+  }else if(currentDay == 6){
     dateKey = today.format("YYYYMMDD");
   }else{
     return;
   }
-  memberTableuser.find({'name': userName, 'date' : dateKey}, function(err, docs){
-     if(err || !docs){
+  memberTable.find({'name': userName, 'date' : dateKey}, function(err, docs){
+     console.log(err+"   "+docs+"   "+(err || !docs));
+     if(err || docs == ''){
+       console.log("false");
        next(false, dateKey);
      }else{
+       console.log("true");
        next(true, dateKey);
      }
   });
