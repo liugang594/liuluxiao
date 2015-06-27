@@ -60,13 +60,17 @@ router.get('/baoming/apply',function (req, res, next) {
                 res.render('already_applied', { name: currentUserName});
             }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-		    console.log(err+"  "+docs);
-                    res.render('baoming_apply', { name: currentUserName});
+		            console.log(err+"  "+docs);
+                    if(err){
+                        res.render('baoming_apply', { err: err});
+                    }else{
+                        res.render('baoming_apply', { name: currentUserName});
+                    }
                 });
                 
             }
       });      
-    });
+    }); 
 });
 
 
