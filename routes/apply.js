@@ -3,13 +3,13 @@ var memberTable = require("./database.js"); //数据库操作
 
 //得到下一个星期日期
 function getNextDay(date){
-	if(date == 7){
-		return 1;
+	if(date == 6){
+		return 0;  //星期日的序号为0，然后是1 2 3 4 5 6
 	}
 	return date+1;
 }
 
-var startDay = 5; //开始申请的星期日期（可能为周日）（活动的前一天）
+var startDay = 0; //开始申请的星期日期（可能为周日）（活动的前一天）
 var activeDay = getNextDay(startDay); // （活动的当天）
 
 var applyHelper = {};
@@ -53,5 +53,5 @@ applyHelper.checkUserAppliedStatus=function(userId, next){
      	}
   	});
 }
-
+console.log(applyHelper.canApply());
 module.exports = applyHelper;
