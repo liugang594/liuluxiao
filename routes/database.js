@@ -24,7 +24,7 @@ memberOperators.insert = function(data, callback){
 		data.valid = true;
 	}
 	var newMember = new memberTable(data);
-     newMember.save(callback);
+    newMember.save(callback);
 };
 
 /*
