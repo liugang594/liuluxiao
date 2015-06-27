@@ -9,7 +9,7 @@ function getNextDay(date){
 	return date+1;
 }
 
-var startDay = 0; //开始申请的星期日期（可能为周日）（活动的前一天）
+var startDay = 6; //开始申请的星期日期（可能为周日）（活动的前一天）
 var activeDay = getNextDay(startDay); // （活动的当天）
 
 var applyHelper = {};
@@ -19,7 +19,7 @@ applyHelper.canApply = function(){
     var today = moment();
     var currentDay = today.format('e'); //得到当前是星期几
     // 只有开始申请日和它的下一日可以申请
-	if(currentDay != startDay && currentDay != activeDay){
+	  if(currentDay != startDay && currentDay != activeDay){
         return false;
     }
     var currentHour = today.format('H');  //得到当前的小时
