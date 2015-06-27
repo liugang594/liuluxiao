@@ -45,8 +45,9 @@ applyHelper.checkUserAppliedStatus=function(userId, next){
   	}else{
     	return;   //如果不是这两天，则直接返回
   	}
-  	memberTable.get({identity: userId, date : dateKey}, function(err, docs){
-    	if(err || docs == ''){
+  	memberTable.get({'identity' : userId, 'date' : dateKey}, function(err, docs){
+	console.log(err+"  "+docs+"  "+userId+"   "+dateKey);
+    	if(err || !docs || docs == ''){
        		next(false, dateKey);
      	}else{
        		next(true, dateKey);

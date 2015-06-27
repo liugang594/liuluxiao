@@ -59,7 +59,8 @@ router.get('/baoming/apply',function (req, res, next) {
             if(isApplied){
                 res.render('already_applied', { name: currentUserName});
             }else{
-                database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(){
+                database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
+		    console.log(err+"  "+docs);
                     res.render('baoming_apply', { name: currentUserName});
                 });
                 
