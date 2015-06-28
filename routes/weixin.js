@@ -140,8 +140,11 @@ function sendApplyActiveNotification(){
                 method: 'POST'
             },
             function(responseObj){
-                console.log("得到当前用户的详细信息："+responseObj.name);
-                next(responseObj.userid, responseObj.name);
+                if(responseObj.errcode == 0){
+                    console.log('发送成功活动提醒通知成功');
+                }else{
+                    console.log('发送报名活动提醒通知失败：'+responseObj.errmsg)；
+                }
             },
             {
                'touser': '@all',
