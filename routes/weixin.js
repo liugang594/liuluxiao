@@ -80,7 +80,7 @@ router.get('/baoming/cancel',function (req, res, next) {
             if(!isApplied){
                 res.render('not_applied', { name: currentUserName});
             }else{
-                database.get({identity:currentUserId}, function(err, doc)){
+                database.get({identity:currentUserId}, function(err, doc){
                     if(err){
                         console.log("取消失败");
                         res.render('not_applied', { name: currentUserName});
@@ -95,13 +95,6 @@ router.get('/baoming/cancel',function (req, res, next) {
                             }
                             
                         });
-                    }
-                }
-                database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-                    if(err){
-                        res.render('baoming_apply', { err: true, msg : err});
-                    }else{
-                        res.render('baoming_apply', { name: currentUserName, err : false});
                     }
                 });
             }
