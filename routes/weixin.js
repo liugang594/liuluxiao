@@ -130,4 +130,29 @@ function queryCurrentUserDetailInfo(accessToken, userId, next){
         );
 }
 
+//发送报名活动提醒
+function sendApplyActiveNotification(){
+    httpReq.doHttpQuery({
+                hostname: 'qyapi.weixin.qq.com',
+                port: 443,
+                path: '/cgi-bin/message/send?access_token='+accessToken,
+                method: 'POST'
+            },
+            function(responseObj){
+                console.log("得到当前用户的详细信息："+responseObj.name);
+                next(responseObj.userid, responseObj.name);
+            },
+            {
+               'touser': '@all',
+               'msgtype': 'text',
+               'agentid': '3',
+               'text': {
+                   'content': '请不要忘记报名参加羽毛球活动哦，如已报名请忽略（测试信息，请无视）'
+               },
+               'safe':'0'
+            }
+        );
+}
+
+sendApplyActiveNotification();
 module.exports = router;

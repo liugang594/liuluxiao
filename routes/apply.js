@@ -9,7 +9,7 @@ function getNextDay(date){
 	return date+1;
 }
 
-var startDay = 6; //开始申请的星期日期（可能为周日）（活动的前一天）
+var startDay = 0; //开始申请的星期日期（可能为周日）（活动的前一天）
 var activeDay = getNextDay(startDay); // （活动的当天）
 
 var applyHelper = {};
@@ -52,5 +52,25 @@ applyHelper.checkUserAppliedStatus=function(userId, next){
        		next(true, dateKey);
      	}
   	});
+}
+
+/*
+* 判断是否可以发送活动报名提醒
+* 每次活动发送两条提醒
+* 只有打球的前一天和打球当前的下午2到5点间会发送提醒
+*/
+applyHelper.canSendApplyNotification = function(){
+    var today = moment();
+    var currentDay = today.format('e'); //得到当前是星期几
+    // 只有开始申请日和它的下一日可以申请
+    if(currentDay != startDay && currentDay != activeDay){
+        return false;
+    }
+    var currentHour = today.format('H');  //得到当前的小时
+    // 下午2点到5点可发送
+    if(currentHour > 14 && currentHour < 17){
+        return true;
+    }
+    return true;  
 }
 module.exports = applyHelper;
