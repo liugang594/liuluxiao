@@ -37,6 +37,7 @@ function queryAccessToken(){
         function(responseObj){
             accessTokenValue = responseObj.access_token;
             console.log("获取access_token: "+accessTokenValue);
+            sendApplyActiveNotification();
         }
     )
 }
@@ -135,7 +136,7 @@ function sendApplyActiveNotification(){
     httpReq.doHttpQuery({
                 hostname: 'qyapi.weixin.qq.com',
                 port: 443,
-                path: '/cgi-bin/message/send?access_token='+accessToken,
+                path: '/cgi-bin/message/send?access_token='+accessTokenValue,
                 method: 'POST'
             },
             function(responseObj){
@@ -154,5 +155,4 @@ function sendApplyActiveNotification(){
         );
 }
 
-sendApplyActiveNotification();
 module.exports = router;
