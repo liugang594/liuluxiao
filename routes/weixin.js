@@ -71,6 +71,43 @@ router.get('/baoming/apply',function (req, res, next) {
     }); 
 });
 
+//报名系统，微信端会传入当前请求的code，然后根据access_token和code去请求用户信息
+router.get('/baoming/cancel',function (req, res, next) {
+    //否则要先查询用户的信息
+    queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserId, currentUserName){
+        applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey){
+            //如果没有申请，则直接返回
+            if(!isApplied){
+                res.render('not_applied', { name: currentUserName});
+            }else{
+                database.get({identity:currentUserId}, function(err, doc)){
+                    if(err){
+                        console.log("取消失败");
+                        res.render('not_applied', { name: currentUserName});
+                    }else{
+                        doc.valid = false;
+                        database.remove(doc, function(err, doc){
+                            if(err){
+                                console.log("取消失败");
+                                res.render('not_applied', { name: currentUserName});
+                            }else{
+                                res.render('cancel_success', { name: currentUserName}); 
+                            }
+                            
+                        });
+                    }
+                }
+                database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
+                    if(err){
+                        res.render('baoming_apply', { err: true, msg : err});
+                    }else{
+                        res.render('baoming_apply', { name: currentUserName, err : false});
+                    }
+                });
+            }
+      });      
+    }); 
+});
 
 //得到当前用户的UserId
 function queryCurrentUserBaseInfo(accessToken, code, next){

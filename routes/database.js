@@ -50,6 +50,19 @@ memberOperators.update = function(data, callback){
 	memberTable.update({identity : data.identity}, data, {}, callback );
 }
 
+/*
+* remove member 
+* identity and date are required
+*
+*/
+memberOperators.remove = function(data, callback){
+	if(!data || !data.identity || !data.date){
+		throw '用户标识和日期不能为空';
+	}
+	memberTable.remove(data, callback );
+}
+
+
 //list all data by specifing date
 memberOperators.list = function(data, callback){
 	memberTable.find(data, callback);
