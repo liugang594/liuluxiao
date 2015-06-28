@@ -64,10 +64,9 @@ router.get('/baoming/apply',function (req, res, next) {
                     if(err){
                         res.render('baoming_apply', { err: err});
                     }else{
-                        res.render('baoming_apply', { name: currentUserName});
+                        res.render('baoming_apply', { name: currentUserName, err : false});
                     }
                 });
-                
             }
       });      
     }); 
