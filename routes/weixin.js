@@ -133,28 +133,37 @@ function queryCurrentUserDetailInfo(accessToken, userId, next){
 
 //发送报名活动提醒
 function sendApplyActiveNotification(){
+    if(!applier.canSendApplyNotification()){
+        //目前还不能发通知，返回
+        return;
+    }
+    var content = JSON.stringify({
+                       "touser": "@all",
+                       "msgtype": "text",
+                       "agentid": "3",
+                       "text": {
+                           "content": "定时通知测试" //中文长度受限，7个字
+                       },
+                       "safe":"0"
+                    });
     httpReq.doHttpQuery({
                 hostname: 'qyapi.weixin.qq.com',
                 port: 443,
                 path: '/cgi-bin/message/send?access_token='+accessTokenValue,
-                method: 'POST'
+                method: 'POST',
+                headers: {  
+                    "Content-Type": 'application/x-www-form-urlencoded',  
+                    "Content-Length": content.length  
+                } 
             },
             function(responseObj){
                 if(responseObj.errcode == 0){
                     console.log('发送成功活动提醒通知成功');
                 }else{
-                    console.log('发送报名活动提醒通知失败：'+responseObj.errmsg)；
+                    console.log("发送报名活动提醒通知失败:"+responseObj.errmsg);
                 }
             },
-            {
-               'touser': '@all',
-               'msgtype': 'text',
-               'agentid': '3',
-               'text': {
-                   'content': '请不要忘记报名参加羽毛球活动哦，如已报名请忽略（测试信息，请无视）'
-               },
-               'safe':'0'
-            }
+            content
         );
 }
 

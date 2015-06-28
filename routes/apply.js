@@ -71,6 +71,6 @@ applyHelper.canSendApplyNotification = function(){
     if(currentHour > 14 && currentHour < 17){
         return true;
     }
-    return true;  
+    return false;  
 }
 module.exports = applyHelper;
