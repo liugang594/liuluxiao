@@ -77,9 +77,9 @@ memberOperators.list = function(data, callback){
 module.exports = memberOperators;
 
 //test insert
-memberOperators.insert({name: '刘刚', identity: 'liugang', valid: true, date : '20150626'}, function(err){
-	err?console.log("报名失败："+err):console.log("报名成功");
-})
+//memberOperators.insert({name: '刘刚', identity: 'liugang', valid: true, date : '20150626'}, function(err){
+//	err?console.log("报名失败："+err):console.log("报名成功");
+//})
 
 //test get
 //memberOperators.get({identity: 'liugang'}, function(err, docs){
