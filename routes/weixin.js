@@ -60,11 +60,13 @@ router.get('/baoming/apply',function (req, res, next) {
                 res.render('already_applied', { name: currentUserName});
             }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-                    if(err){
-                        res.render('baoming_apply', { err: true, msg : err});
-                    }else{
-                        res.render('baoming_apply', { name: currentUserName, err : false});
-                    }
+                    database.list({date : dateKey}, function(listErr, docs){
+                        if(err){
+                            res.render('baoming_apply', { err: true, msg : err, list : docs});
+                        }else{
+                            res.render('baoming_apply', { name: currentUserName, err : false, list : docs});
+                        }
+                    });
                 });
             }
       });      
@@ -81,13 +83,14 @@ router.get('/baoming/cancel',function (req, res, next) {
                 res.render('not_applied', { name: currentUserName});
             }else{
                 database.findOneAndRemove({identity:currentUserId, date: dateKey}, function(err, doc){
-                            if(err){
-                                console.log("取消失败");
-                                res.render('not_applied', { name: currentUserName});
-                            }else{
-                                res.render('cancel_success', { name: currentUserName}); 
-                            }
-                            
+                    database.list({date : dateKey}, function(listErr, docs){
+                        if(err){
+                            console.log("取消失败");
+                            res.render('not_applied', { name: currentUserName, list : docs});
+                        }else{
+                            res.render('cancel_success', { name: currentUserName, list : docs}); 
+                        }   
+                    });                             
                 });
             }
       });      
