@@ -17,7 +17,7 @@ var QYWeiXinConfig = {
 router.get('/', wechat(QYWeiXinConfig, function (req, res, next) {
             console.log("验证微信企业号是否有效")
             res.writeHead(200);
-            res.end('hello node api');
+            res.end('liuluxiao');
         }
     )
 );
@@ -60,9 +60,8 @@ router.get('/baoming/apply',function (req, res, next) {
                 res.render('already_applied', { name: currentUserName});
             }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-		            console.log(err+"  "+docs);
                     if(err){
-                        res.render('baoming_apply', { err: err});
+                        res.render('baoming_apply', { err: true, msg : err});
                     }else{
                         res.render('baoming_apply', { name: currentUserName, err : false});
                     }

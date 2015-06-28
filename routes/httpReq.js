@@ -1,6 +1,5 @@
 var https = require("https");
 
-
 var httpReq = {};
 httpReq.doHttpQuery = function(options, next){
 	var req = https.request(options, function (res) {
