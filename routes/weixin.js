@@ -57,7 +57,9 @@ router.get('/baoming/apply',function (req, res, next) {
         applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey){
             //如果已经申请了，则直接返回
             if(isApplied){
-                res.render('already_applied', { name: currentUserName});
+                database.list({date : dateKey}, function(listErr, docs){
+                    res.render('already_applied', { name: currentUserName, list : docs});
+                });
             }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
                     database.list({date : dateKey}, function(listErr, docs){
