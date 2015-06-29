@@ -5,7 +5,7 @@ var memberSchema = mongo.Schema(
 				{	name 	: { type : String }, 
 					date 	: { type : String }, 
 					valid 	: { type : Boolean }, 
-					identity: { type : String, index: { unique: true }}
+					identity: { type : String }
 				}
 			);
 var memberTable = db.model('badminton', memberSchema);

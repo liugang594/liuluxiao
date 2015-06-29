@@ -63,11 +63,11 @@ router.get('/baoming/apply',function (req, res, next) {
                 });
             }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-                    database.list({date : dateKey}, function(listErr, docs){
+                    database.list({date : dateKey}, function(listErr, listDocs){
                         if(err){
-                            res.render('baoming_apply', { err: true, msg : err, list : docs});
+                            res.render('baoming_apply', { err: true, msg : err, list : listDocs});
                         }else{
-                            res.render('baoming_apply', { name: currentUserName, err : false, list : docs});
+                            res.render('baoming_apply', { name: currentUserName, err : false, list : listDocs});
                         }
                     });
                 });
