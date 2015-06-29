@@ -10,11 +10,13 @@
   	<%}else{%>
     	<p><%= name %> 你好，欢迎你报名下期的羽毛球活动</p>
     <%}%>
-     已报名人员(共<%= list.length %>个):
-  <ul>
-    <% for(var i=0; i<list.length; i++) {%>
-        <li><%= list[i].name %></li>
-    <% } %>
-  </ul>
+    <% if(list){ %>
+      已报名人员(共<%= list.length %>个):
+      <ul>
+          <% for(var i=0; i<list.length; i++) {%>
+              <li><%= list[i].name %></li>
+          <% } %>
+      </ul>  
+    <%}%>
   </body>
 </html>

@@ -6,10 +6,13 @@
   </head>
   <body>
     <p><%= name %> 你好，你没有报名此次活动，敬请参与</p>
-    已报名人员(共<%= list.length %>个):
-	<ul>
-		<% for(var i=0; i<list.length; i++) {%>
-   			<li><%= list[i].name %></li>
-		<% } %>
-	</ul>  </body>
+    <% if(list){ %>
+      已报名人员(共<%= list.length %>个):
+    	<ul>
+          <% for(var i=0; i<list.length; i++) {%>
+              <li><%= list[i].name %></li>
+          <% } %>
+    	</ul>  
+    <%}%>
+</body>
 </html>

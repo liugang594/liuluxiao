@@ -7,10 +7,13 @@
   <body>
     <p><%= name %> 你好，你已经报名了此次活动，谢谢参与</p>
     已报名人员(共<%= list.length %>个):
-	<ul>
-		<% for(var i=0; i<list.length; i++) {%>
-   			<li><%= list[i].name %></li>
-		<% } %>
-	</ul>
+    <% if(list){ %>
+      已报名人员(共<%= list.length %>个):
+      <ul>
+          <% for(var i=0; i<list.length; i++) {%>
+              <li><%= list[i].name %></li>
+          <% } %>
+      </ul>  
+    <%}%>
   </body>
 </html>

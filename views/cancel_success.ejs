@@ -6,11 +6,13 @@
   </head>
   <body>
     <p><%= name %> 你好，取消本次活动报名成功，希望下次继续参与</p>
-    已报名人员(共<%= list.length %>个):
-	<ul>
-		<% for(var i=0; i<list.length; i++) {%>
-   			<li><%= list[i].name %></li>
-		<% } %>
-	</ul>
+    <% if(list){ %>
+      已报名人员(共<%= list.length %>个):
+      <ul>
+          <% for(var i=0; i<list.length; i++) {%>
+              <li><%= list[i].name %></li>
+          <% } %>
+      </ul>  
+    <%}%>
   </body>
 </html>
