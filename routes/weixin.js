@@ -83,7 +83,9 @@ router.get('/baoming/cancel',function (req, res, next) {
         applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey){
             //如果没有申请，则直接返回
             if(!isApplied){
-                res.render('not_applied', { name: currentUserName});
+                database.list({date : dateKey}, function(listErr, docs){
+                    res.render('not_applied', { name: currentUserName, list : docs});
+                });
             }else{
                 database.findOneAndRemove({identity:currentUserId, date: dateKey}, function(err, doc){
                     database.list({date : dateKey}, function(listErr, docs){
