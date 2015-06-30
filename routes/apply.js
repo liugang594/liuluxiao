@@ -43,7 +43,7 @@ applyHelper.checkUserAppliedStatus=function(userId, next){
   	}else if(currentDay == activeDay){
     	dateKey = today.format("YYYYMMDD");   //如果是打球那天，则使用当前日期
   	}else{
-    	return;   //如果不是这两天，则直接返回
+    	return next(false, dateKey);   //如果不是这两天，则直接返回
   	}
   	memberTable.get({'identity' : userId, 'date' : dateKey}, function(err, docs){
     	if(err || !docs || docs == ''){
