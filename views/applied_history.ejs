@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>小优羽毛球协会报名系统</title>
+  </head>
+  <body>
+    <p>以下为历次报名列表：</p>
+    <% if(list){ %>
+          <% for(var i=0; i<list.length; i++) {%>
+              <a>活动日期：<%= list[i]._id %>，参加人数：<%= list[i]._count%></a>
+          <% } %>
+    <%}%>
+  </body>
+</html>
