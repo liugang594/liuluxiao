@@ -115,7 +115,7 @@ router.get("/baoming/histories", function(req, res, next){
 
 //查看某次活动的报名情况
 router.get("/baoming/history", function(req, res, next){
-    var date = req.params.date;
+    var date = req.query.date;
     if(!date){
         res.send("没有指定日期");
     }
