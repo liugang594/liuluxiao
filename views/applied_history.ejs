@@ -8,7 +8,7 @@
     <p>以下为历次报名列表：</p>
     <% if(list){ %>
           <% for(var i=0; i<list.length; i++) {%>
-              <a>活动日期：<%= list[i]._id %>，参加人数：<%= list[i]._count%></a>
+              <a href="/weixin/baoming/history/<%=list[i]._id%>">活动日期：<%= list[i]._id %>，参加人数：<%= list[i]._count%></a><br />
           <% } %>
     <%}%>
   </body>
