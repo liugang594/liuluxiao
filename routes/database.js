@@ -74,7 +74,27 @@ memberOperators.list = function(data, callback){
 	memberTable.find(data, callback);
 }
 
+memberOperators.histories = function(callback){
+	memberTable.aggregate(
+	 	{ $group: 
+		 	{ _id: '$date', _count: { $sum: 1 } } 
+		},
+		function (err, docs) {
+			if(err){
+				console.log(err);
+			}else{
+				callback(docs);
+			}
+	 	}
+	);
+}
+
 module.exports = memberOperators;
+
+//test histories
+// memberOperators.histories({}, function(data){
+// 	console.log(data);
+// });
 
 //test insert
 //memberOperators.insert({name: '刘刚', identity: 'liugang', valid: true, date : '20150626'}, function(err){

@@ -102,6 +102,17 @@ router.get('/baoming/cancel',function (req, res, next) {
     }); 
 });
 
+//查看历史数据
+router.get("/baoming/history", function(req, res, next){
+    database.histories(function(array){
+        if(array){
+            res.render('applied_history', {list : array});
+        }else{
+            res.render('applied_history', {list : {}});
+        }
+    })
+});
+
 //得到当前用户的UserId
 function queryCurrentUserBaseInfo(accessToken, code, next){
     httpReq.doHttpQuery({
