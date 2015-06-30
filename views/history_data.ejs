@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>小优羽毛球协会报名系统</title>
+  </head>
+  <body>
+    
+    <% if(list){ %>
+      <p><%= date %> 当天报名情况如下：</p>
+      报名人员(共<%= list.length %>个):
+    	<ul>
+          <% for(var i=0; i<list.length; i++) {%>
+              <li><%= list[i].name %></li>
+          <% } %>
+    	</ul>  
+    <%}else{%>
+      <p><%= date %> 当天没有人报名</p>
+    <%}%>
+</body>
+</html>

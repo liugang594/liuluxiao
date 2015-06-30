@@ -103,12 +103,27 @@ router.get('/baoming/cancel',function (req, res, next) {
 });
 
 //查看历史数据
-router.get("/baoming/history", function(req, res, next){
+router.get("/baoming/histories", function(req, res, next){
     database.histories(function(array){
         if(array){
-            res.render('applied_history', {list : array});
+            res.render('applied_histories', {list : array});
         }else{
-            res.render('applied_history', {list : {}});
+            res.render('applied_histories', {list : {}});
+        }
+    })
+});
+
+//查看某次活动的报名情况
+router.get("/baoming/history", function(req, res, next){
+    var date = req.params.date;
+    if(!date){
+        res.send("没有指定日期");
+    }
+    database.list({date:date}, function(err, docs){
+        if(err){
+            res.send("查询失败")
+        }else{
+            res.render('history_data', {date:date, list : docs||{}});
         }
     })
 });
