@@ -9,7 +9,7 @@ function getNextDay(date){
 	return date+1;
 }
 
-var startDay = 0; //开始申请的星期日期（可能为周日）（活动的前一天）
+var startDay = 3; //开始申请的星期日期（可能为周日）（活动的前一天）
 var activeDay = getNextDay(startDay); // （活动的当天）
 
 var applyHelper = {};
