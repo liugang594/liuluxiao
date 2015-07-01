@@ -170,7 +170,7 @@ function sendApplyActiveNotification(){
                        "msgtype": "text",
                        "agentid": "3",
                        "text": {
-                           "content": "定时通知测试" //中文长度受限，7个字
+                           "content": "记得报名哦" //中文长度受限，7个字
                        },
                        "safe":"0"
                     });
