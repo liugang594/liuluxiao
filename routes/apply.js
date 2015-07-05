@@ -47,10 +47,12 @@ applyHelper.checkUserAppliedStatus=function(userId, next){
   	}
   	memberTable.get({'identity' : userId, 'date' : dateKey}, function(err, docs){
     	if(err || !docs || docs == ''){
-       		next(false, dateKey);
+       		next(false, dateKey, false);
+     	}else if(docs.valid){
+       		next(true, dateKey, true);
      	}else{
-       		next(true, dateKey);
-     	}
+		next(false, dateKey, true);
+	}
   	});
 }
 

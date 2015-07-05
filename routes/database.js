@@ -43,10 +43,10 @@ memberOperators.get = function(data, callback){
 *
 */
 memberOperators.update = function(data, callback){
-	if(!data || !data.identity){
-		throw '用户标识不能为空';
+	if(!data || !data.identity || !data.date){
+		throw '用户标识和日期不能为空';
 	}
-	memberTable.update({identity : data.identity}, data, {}, callback );
+	memberTable.update({identity : data.identity, date: data.date}, data, {}, callback );
 }
 
 /*
@@ -74,10 +74,18 @@ memberOperators.list = function(data, callback){
 }
 
 memberOperators.histories = function(callback){
-	memberTable.aggregate(
-	 	{ $group: 
-		 	{ _id: '$date', _count: { $sum: 1 } } 
-		},
+	memberTable.aggregate([
+			{
+				$match:{
+					valid:{$eq:true}
+			  	}
+			},
+			{ 
+				$group: { 
+					_id: '$date', _count: { $sum: 1 } 
+				} 
+			}
+		],
 		function (err, docs) {
 			if(err){
 				console.log(err);
@@ -91,7 +99,7 @@ memberOperators.histories = function(callback){
 module.exports = memberOperators;
 
 //test histories
-// memberOperators.histories({}, function(data){
+// memberOperators.histories(function(data){
 // 	console.log(data);
 // });
 

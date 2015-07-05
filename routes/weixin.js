@@ -55,15 +55,25 @@ router.get('/baoming/apply',function (req, res, next) {
     }
     //否则要先查询用户的信息
     queryCurrentUserBaseInfo(accessTokenValue, req.query.code, function(currentUserId, currentUserName){
-        applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey){
+        applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey, cancelled){
             //如果已经申请了，则直接返回
             if(isApplied){
-                database.list({date : dateKey}, function(listErr, docs){
+                database.list({date : dateKey, valid: true}, function(listErr, docs){
                     res.render('already_applied', { name: currentUserName, list : docs});
                 });
-            }else{
+            }else if(cancelled){
+		database.update({identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
+                    database.list({date : dateKey, valid: true}, function(listErr, listDocs){
+                        if(err){
+                            res.render('baoming_apply', { err: true, msg : err, list : listDocs});
+                        }else{
+                            res.render('baoming_apply', { name: currentUserName, err : false, list : listDocs});
+                        }
+                    });
+                });
+	    }else{
                 database.insert({name: currentUserName, identity:currentUserId, date:dateKey, valid:true}, function(err, docs){
-                    database.list({date : dateKey}, function(listErr, listDocs){
+                    database.list({date : dateKey, valid:true}, function(listErr, listDocs){
                         if(err){
                             res.render('baoming_apply', { err: true, msg : err, list : listDocs});
                         }else{
@@ -83,11 +93,11 @@ router.get('/baoming/cancel',function (req, res, next) {
         applier.checkUserAppliedStatus(currentUserId, function(isApplied, dateKey){
             //如果没有申请，则直接返回
             if(!isApplied){
-                database.list({date : dateKey}, function(listErr, docs){
+                database.list({date : dateKey, valid: true}, function(listErr, docs){
                     res.render('not_applied', { name: currentUserName, list : docs});
                 });
             }else{
-                database.findOneAndRemove({identity:currentUserId, date: dateKey}, function(err, doc){
+               /* database.findOneAndRemove({identity:currentUserId, date: dateKey}, function(err, doc){
                     database.list({date : dateKey}, function(listErr, docs){
                         if(err){
                             console.log("取消失败");
@@ -96,9 +106,20 @@ router.get('/baoming/cancel',function (req, res, next) {
                             res.render('cancel_success', { name: currentUserName, list : docs}); 
                         }   
                     });                             
-                });
+                });*/
+		database.update({identity:currentUserId, date:dateKey, valid:false}, function(err,doc){
+		    database.list({date : dateKey, valid:true}, function(listErr, docs){
+                        if(err){
+                            console.log("取消失败");
+                            res.render('not_applied', { name: currentUserName, list : docs});
+                        }else{
+                            res.render('cancel_success', { name: currentUserName, list : docs});
+                        }
+                    });
+			
+		});
             }
-      });      
+	});
     }); 
 });
 
@@ -119,7 +140,7 @@ router.get("/baoming/history", function(req, res, next){
     if(!date){
         res.send("没有指定日期");
     }
-    database.list({date:date}, function(err, docs){
+    database.list({date:date, valid:true}, function(err, docs){
         if(err){
             res.send("查询失败")
         }else{
