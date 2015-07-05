@@ -186,7 +186,7 @@ function sendApplyActiveNotification(){
             },
             function(responseObj){
                 if(responseObj.errcode == 0){
-                    console.log('发送成功活动提醒通知成功');
+                    console.log('发送报名活动提醒通知成功');
                 }else{
                     console.log("发送报名活动提醒通知失败:"+responseObj.errmsg);
                 }

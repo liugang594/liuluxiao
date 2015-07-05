@@ -3,13 +3,12 @@ var db = mongo.createConnection('localhost', 'liuluxiao');
 
 var memberSchema = mongo.Schema(
 				{	name 	: { type : String }, 
-					date 	: { type : String }, 
+					date 	: { type : String, index: true }, 
 					valid 	: { type : Boolean }, 
-					identity: { type : String }
+					identity: { type : String, index: true }
 				}
 			);
 var memberTable = db.model('badminton', memberSchema);
-
 var memberOperators = {};
 
 /*
